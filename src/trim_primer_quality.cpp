@@ -399,7 +399,9 @@ int trim_bam_qual_primer(std::string bam, std::string bed, std::string bam_out, 
     t = quality_trim(aln, min_qual, sliding_window);	// Quality Trimming
     if(bam_is_rev(aln))
       aln->core.pos = t.start_pos;
-    t = condense_cigar(t.cigar, t.nlength);
+    if (t.nlength > 0) {  
+      t = condense_cigar(t.cigar, t.nlength);
+    }
     aln->core.pos += t.start_pos;
     replace_cigar(aln, t.nlength, t.cigar);
     if(bam_cigar2rlen(aln->core.n_cigar, bam_get_cigar(aln)) >= min_length){
